@@ -1,0 +1,14 @@
+body{
+    background-color: red;
+    color: yellow
+}
+p{
+    color: blue;
+    font-size: 20px;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+h1{
+    color: yellow;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+}
+
