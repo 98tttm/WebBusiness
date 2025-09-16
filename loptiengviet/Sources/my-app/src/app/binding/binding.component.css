@@ -1,0 +1,11 @@
+.t-primary{
+  color: navy;
+}
+
+.t-error{
+  color: red;
+}
+
+.t-normal{
+  font-style: italic;
+}
