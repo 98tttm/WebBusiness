@@ -1,0 +1,84 @@
+<html>
+    <head>
+        <title>Exercise 66</title>
+        <script type="text/javascript">
+            txt="<root><student>"
+            txt+= "<id>987456</id>"
+            txt+= "<name>Marie Curie</name>"
+            txt+= "<birthday>7/11/1867</birthday>"
+            txt+= "<gender>Woman</gender>"
+            txt+= "</student></root>"
+        </script>
+        <script type="text/javascript">
+            var parser=new DOMParser()
+            var xmlDoc=parser.parseFromString(txt,"text/xml")
+            var id=xmlDoc.getElementsByTagName("id")[0].childNodes[0].nodeValue
+            var name=xmlDoc.getElementsByTagName("name")[0].childNodes[0].nodeValue
+            var birthday=xmlDoc.getElementsByTagName("birthday")[0].childNodes[0].nodeValue
+            var gender=xmlDoc.getElementsByTagName("gender")[0].childNodes[0].nodeValue
+
+            function blueBgWhiteText(obj)
+            {
+                obj.style.backgroundColor="blue"
+                obj.style.color="white"
+            }
+
+            function whiteBgBlackText(obj)
+            {
+                obj.style.backgroundColor="white"
+                obj.style.color="black"
+            }
+
+            function mouseOver()
+            {
+                tblrows=document.getElementsByTagName("tr")
+                for (i in tblrows)
+                {
+                    tblrows[i].onmouseover=function(){
+                        blueBgWhiteText(this)
+                    }
+                }
+            }
+            function mouseOut()
+            {
+                tblrows=document.getElementsByTagName("tr")
+                for (i in tblrows)
+                {
+                    tblrows[i].onmouseout=function(){
+                        whiteBgBlackText(this)
+                    }
+                }
+            }
+        </script>
+    </head>
+    <body>
+        <table border="1" width="300">
+            <tr align="center">
+                <td colspan="2" style="background-color: aquamarine; color: black;">Student Information</td>
+            </tr>
+            <tr>
+                <td>Student ID:</td>
+                <td id="tdid"></td>
+            </tr>
+            <tr>
+                <td>Student Name:</td>
+                <td id="tdname"></td>
+            </tr>
+            <tr>
+                <td>Birthday:</td>
+                <td id="tdbirthday"></td>
+            </tr><tr>
+                <td>Gender:</td>
+                <td id="tdgender"></td>
+            </tr>
+        </table>
+        <script type="text/javascript">
+            document.getElementById("tdid").innerHTML=id
+            document.getElementById("tdname").innerHTML=name
+            document.getElementById("tdbirthday").innerHTML=birthday
+            document.getElementById("tdgender").innerHTML=gender
+            mouseOver()
+            mouseOut()
+        </script>
+    </body>
+</html>
