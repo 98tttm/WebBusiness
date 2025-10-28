@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width"/>
+	<title>VnExpress Kinh doanh (RSS)</title>
+	<style>
+		body { font-family: system-ui, Arial, sans-serif; margin: 24px; }
+		.feed { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 16px; }
+		.card { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; background: #fff; }
+		.card img { width: 100%; height: 180px; object-fit: cover; display: block; }
+		.card .content { padding: 12px 14px; }
+		.card h3 { margin: 0 0 8px; font-size: 16px; line-height: 1.3; }
+		.card h3 a { color: #111827; text-decoration: none; }
+		.card h3 a:hover { text-decoration: underline; }
+		.card p { margin: 0; color: #374151; font-size: 14px; }
+		.header { display:flex; align-items:center; gap:10px; margin-bottom:10px;}
+		.small { color:#6b7280; font-size:12px;}
+		#raw { height: 100px; overflow:auto; background: #fffbe6; border: 1px solid #f59e0b; padding: 8px; margin-bottom:16px; }
+	</style>
+</head>
+<body>
+	<div class="header">
+		<h2 style="margin:0;">VnExpress – Kinh doanh</h2>
+		<button id="reloadBtn">Reload</button>
+		<span class="small">Nguồn: https://vnexpress.net/rss/kinh-doanh.rss</span>
+	</div>
+
+	<div id="raw" hidden></div> <!-- bật debug bằng cách xóa 'hidden' nếu muốn xem XML thô -->
+
+	<div id="feed" class="feed"></div>
+
+	<script>
+		async function loadKinhDoanh() {
+			const FEED_URL = "https://vnexpress.net/rss/kinh-doanh.rss";
+
+			// Một số nguồn RSS chặn CORS. Ta thử fetch trực tiếp, nếu lỗi thì dùng proxy allorigins.
+			const tryFetch = async (url) => {
+				const res = await fetch(url);
+				if (!res.ok) throw new Error("HTTP " + res.status);
+				return await res.text();
+			};
+
+			let xmlText;
+			try {
+				xmlText = await tryFetch(FEED_URL);
+			} catch (e) {
+				// Fallback qua proxy CORS miễn phí
+				const proxied = "https://api.allorigins.win/raw?url=" + encodeURIComponent(FEED_URL);
+				xmlText = await tryFetch(proxied);
+			}
+
+			// (Tùy chọn) xem XML thô để debug
+			const raw = document.getElementById("raw");
+			raw.textContent = xmlText;
+
+			// Parse XML
+			const dom = new DOMParser().parseFromString(xmlText, "application/xml");
+
+			// Nếu có lỗi parser
+			if (dom.querySelector("parsererror")) {
+				document.getElementById("feed").innerHTML = "<p>Không thể phân tích RSS.</p>";
+				return;
+			}
+
+			// Mỗi <item> là một bài viết
+			const items = Array.from(dom.querySelectorAll("channel > item"));
+			renderItems(items);
+		}
+
+		function renderItems(items) {
+			const container = document.getElementById("feed");
+			container.innerHTML = "";
+
+			items.forEach(item => {
+				const title = text(item, "title");
+				const link = text(item, "link");
+				const descHTML = text(item, "description"); // chứa HTML kèm <img>
+				const enclosureURL = item.querySelector("enclosure")?.getAttribute("url") || "";
+
+				// Lấy ảnh: ưu tiên <img> trong description, nếu không có thì thử <enclosure>
+				const { imgSrc, descText } = extractImageAndText(descHTML, enclosureURL);
+
+				const card = document.createElement("article");
+				card.className = "card";
+
+				card.innerHTML = `
+					${imgSrc ? `<img src="${imgSrc}" alt="">` : ""}
+					<div class="content">
+						<h3><a href="${link}" target="_blank" rel="noopener noreferrer">${escapeHTML(title)}</a></h3>
+						<p>${escapeHTML(descText)}</p>
+					</div>
+				`;
+				container.appendChild(card);
+			});
+		}
+
+		// Helpers
+		function text(parent, tag) {
+			const el = parent.querySelector(tag);
+			return (el && (el.textContent || "")).trim();
+		}
+
+		function extractImageAndText(descHTML, enclosureURL) {
+			// Parse đoạn HTML trong <description>
+			const temp = document.createElement("div");
+			temp.innerHTML = descHTML || "";
+
+			// Tìm ảnh đầu tiên
+			let imgSrc = temp.querySelector("img")?.getAttribute("src") || "";
+			if (!imgSrc && enclosureURL) imgSrc = enclosureURL;
+
+			// Lấy phần văn bản (loại bỏ thẻ, link)
+			// Thường mô tả có dạng: <a><img ...></a><br>Văn bản mô tả...
+			// Ta bỏ các img/a để lấy text gọn gàng.
+			temp.querySelectorAll("img, a").forEach(n => n.remove());
+			const descText = (temp.textContent || "").replace(/\s+/g, " ").trim();
+
+			return { imgSrc, descText };
+		}
+
+		function escapeHTML(str) {
+			return (str || "").replace(/[&<>"']/g, s => ({
+				"&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;"
+			}[s]));
+		}
+
+		// Khởi động
+		document.getElementById("reloadBtn").addEventListener("click", loadKinhDoanh);
+		loadKinhDoanh();
+	</script>
+</body>
+</html>

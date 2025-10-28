@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width"/>
+    <title>Weather Info</title>
+    <script type="text/javascript">
+        function load_weather() {
+            const api = "https://webapi.dantri.com.vn/misc";
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", api, true);
+            xhr.send();
+
+            xhr.onreadystatechange = function() {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const string_json = xhr.responseText;
+                    document.getElementById("my_div").innerText = string_json; // hiển thị JSON để debug
+
+                    const object_json = JSON.parse(string_json);
+                    const weathers = object_json.weathers; // ✅ đúng key trong JSON
+                    display_weathers(weathers);
+                }
+            };
+        }
+
+        function display_weathers(weathers) {
+            const tbody = document.getElementById("weather_tbody");
+            tbody.innerHTML = ""; // Xóa dữ liệu cũ
+
+            for (let i = 0; i < weathers.length; i++) {
+                const weather = weathers[i];
+                const tr = document.createElement("tr");
+
+                const td_name = document.createElement("td");
+                const td_temp = document.createElement("td");
+                const td_status = document.createElement("td");
+                const td_icon = document.createElement("td");
+
+                td_name.innerText = weather.name;
+                td_temp.innerText = weather.temperature + "°C";
+                td_status.innerText = weather.clouds;
+                td_icon.innerHTML = `<img src="https://openweathermap.org/img/wn/${weather.icon}@2x.png" width="50">`;
+
+                tr.appendChild(td_name);
+                tr.appendChild(td_temp);
+                tr.appendChild(td_status);
+                tr.appendChild(td_icon);
+
+                tbody.appendChild(tr);
+            }
+        }
+    </script>
+</head>
+<body>
+    <div id="my_div" style="height: 100px; overflow-y: scroll; background-color: yellow;">
+    </div>
+
+    <h2>Weather Data</h2>
+    <table border="1" cellspacing="0" cellpadding="6">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Temperature</th>
+                <th>Clouds</th>
+                <th>Icon</th>
+            </tr>
+        </thead>
+        <tbody id="weather_tbody"></tbody>
+    </table>
+
+    <script type="text/javascript">
+        load_weather();
+    </script>
+</body>
+</html>
