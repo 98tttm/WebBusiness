@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Employee List</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            width: 300px;
+            text-align: center;
+        }
+    </style>
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const titleSelect = document.getElementById("title-select");
+            const employeeTable = document.getElementById("employee-table").getElementsByTagName('tbody')[0];
+
+            const xhr = new XMLHttpRequest();
+            xhr.open("GET", "index.xml", true);
+            xhr.send();
+
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState === 4 && xhr.status === 200) {
+                    const xmlDoc = xhr.responseXML;
+                    const employees = xmlDoc.getElementsByTagName("employee");
+
+                    const uniqueTitles = new Set();
+                    for (let i = 0; i < employees.length; i++) {
+                        uniqueTitles.add(employees[i].getAttribute("title"));
+                    }
+
+                    uniqueTitles.forEach(function (title) {
+                        const option = document.createElement("option");
+                        option.text = title;
+                        titleSelect.add(option);
+                    });
+
+                    titleSelect.addEventListener("change", function () {
+                        const selectedTitle = titleSelect.value;
+                        // Clear the employee list.
+                        employeeTable.innerHTML = ""; 
+
+                        for (let i = 0; i < employees.length; i++) {
+                            if (employees[i].getAttribute("title") === selectedTitle) {
+                                const row = employeeTable.insertRow();
+                                row.insertCell(0).textContent = employees[i].getAttribute("id");
+                                row.insertCell(1).textContent = employees[i].getElementsByTagName("name")[0].textContent;
+                                const phones = employees[i].getElementsByTagName("phone");
+                                let phoneNumbers = "";
+                                for (let j = 0; j < phones.length; j++) {
+                                    phoneNumbers += phones[j].textContent + " ";
+                                }
+                                row.insertCell(2).textContent = phoneNumbers.trim();
+                            }
+                        }
+                    });
+                }
+            };
+        });
+    </script>
+</head>
+
+<body>
+    <label for="title-select">Title:</label>
+    <select id="title-select"></select>
+    <table id="employee-table">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Name</th>
+                <th>Phone</th>
+            </tr>
+        </thead>
+        <tbody>
+            
+        </tbody>
+    </table>
+</body>
+</html>

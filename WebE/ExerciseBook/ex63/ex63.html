@@ -1,0 +1,239 @@
+<html>
+    <head>
+        <title>Member Registration</title>
+        <style type="text/css">
+            table#tbl, table#tbl td 
+            {
+                border: solid 1px;
+                border-collapse: collapse
+            }
+        </style>
+        <script type="text/javascript">
+            function createSelect(id,from,to)
+            {
+                //get element from id
+                select=document.getElementById(id)
+                for(i=from; i<=to; i++)
+                {
+                    option=document.createElement("option")
+                    option.value=i
+                    option.innerText=i
+                    select.appendChild(option)
+                }
+            }
+            function changeBackgroundOver(obj)
+            {
+                obj.style.backgroundColor='yellow'
+            }
+            function changeBackgroundOut(obj)
+            {
+                obj.style.backgroundColor='white'
+            }
+            function insertLast()
+            {
+                //Get name
+                name=document.getElementById("inputname").value
+                //get birthday
+                day=document.getElementById("selectday").value
+                month=document.getElementById("selectmonth").value
+                year=document.getElementById("selectyear").value
+                birthday=day+"/"+month+"/"+year
+                //get Gender
+                gender="";
+                genderRadioButton=document.getElementsByName("sex")
+                for (i of genderRadioButton)
+                {
+                    if (i.checked)
+                    {
+                        gender = i.value;
+                        break;
+                    }
+                }
+                //get email
+                email=document.getElementById("inputemail").value
+                //get hobbies
+                shopping = document.getElementById("shopping");
+                tourism = document.getElementById("tourism");
+                chat = document.getElementById("chat");
+                reading=document.getElementById("reading")
+                listening=document.getElementById("listening")
+                hobbies=[];
+                // Check if each checkbox is selected
+                if (shopping.checked) 
+                {
+                    hobbies.push(shopping.value)
+                }
+                if (tourism.checked) 
+                {
+                    hobbies.push(tourism.value)
+                }
+                if (chat.checked) 
+                {
+                    hobbies.push(chat.value)
+                }
+                if (reading.checked) 
+                {
+                    hobbies.push(reading.value)
+                } 
+                if (listening.checked) 
+                {
+                    hobbies.push(listening.value)
+                }
+                hobbies.join(", ")  
+                //get Color
+                color="";
+                colorRadioButton=document.getElementsByName("color")
+                for (i of colorRadioButton)
+                {
+                    if (i.checked)
+                    {
+                        color = i.value;
+                        break;
+                    }
+                }
+                tbl=document.getElementById("tbl")
+                tr=document.createElement("tr")
+                td1=document.createElement("td")
+                td2=document.createElement("td")
+                td3=document.createElement("td")
+                td4=document.createElement("td")
+                td5=document.createElement("td")
+                td6=document.createElement("td")
+                td1.innerText=name
+                td2.innerText=email
+                td3.innerText=gender
+                td4.innerText=birthday
+                td5.innerText=hobbies
+                td6.innerText=color
+                tr.appendChild(td1)
+                tr.appendChild(td2)
+                tr.appendChild(td3)
+                tr.appendChild(td4)
+                tr.appendChild(td5)
+                tr.appendChild(td6)
+                tr.onmouseover= function(){
+                        changeBackgroundOver(this)
+                    } 
+                tr.onmouseout= function(){
+                        changeBackgroundOut(this)
+                    }
+                tbl.appendChild(tr)
+            }
+        </script>
+    </head>
+    <body>
+        <h1>Member Registration</h1>
+        <hr>
+        <form>
+            <table>
+                <tr>
+                    <td>
+                        <label for="inputname">Name(*)</label>
+                    </td>
+                    <td>
+                        <input type="text" id="inputname" name="inputname">
+                    </td>
+                </tr>
+                <tr>
+                    <td>Birthday (*)</td>
+                    <td>
+                        Day: <select id="selectday"></select>
+                        Month: <select id="selectmonth"></select>
+                        Year: <select id="selectyear"></select>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Gender(*)</td>
+                    <td>
+                        <input type="radio" id="selectman" name="sex" value="man"> 
+                        <label for="selectman">Man</label>
+	                    <input type="radio" id="selectwoman"name="sex" value="woman">
+                        <label for="selectwoman">Woman</label>
+                    </td>
+                </tr>
+                <tr>
+                    <td>
+                        <label for="inputemail">Email(*)</label>
+                    </td>
+                    <td>
+                        <input type="text" id="inputemail" name="inputemail">
+                    </td>
+                </tr>
+            </table>
+            <p>
+                Your favorite: <br/>
+                <input type="checkbox" id="shopping" name="shopping" value="Shopping" />
+                <label for="shopping">Shopping</label> <br/>
+                <input type="checkbox" id="tourism" name="tourism" value="Tourism" /> 
+                <label for="tourism">Tourism</label> <br/>
+                <input type="checkbox" id="chat" name="chat" value="Chat"/> 
+                <label for="chat">Chat</label> <br/>
+                <input type="checkbox" id="reading" name="reading" value="Reading" /> 
+                <label for="reading">Read a book</label> <br/>
+                <input type="checkbox" id="listening" name="listening" value="Listening" /> 
+                <label for="listening">Listening to music</label> <br/>                
+            </p>
+            <p>
+                Your favorite color: <br/>
+                <input type="radio" id="selectblue" name="color" value="Blue"> 
+                <label for="selectblue" style="background-color: blue;">Blue</label> <br/>
+                <input type="radio" id="selectred" name="color" value="Red">
+                <label for="selectred" style="background-color: red;">Red</label> <br/>
+                <input type="radio" id="selectyellow" name="color" value="Yellow">
+                <label for="selectyellow" style="background-color: yellow;">Yellow</label> <br/>
+                <input type="radio" id="selectgreen" name="color" value="Green">
+                <label for="selectgreen" style="background-color: green;">Green</label> <br/>
+                <input type="radio" id="selectviolet" name="color" value="Violet">
+                <label for="selectviolet" style="background-color: violet;">Violet</label> <br/>
+            </p>
+            <p>
+                <input type="button" value="Sign up"
+                    onclick="insertLast()">
+                <input type="reset" value="Reset">
+            </p>
+        </form>           
+        <script>
+            createSelect("selectday",1,31)
+            createSelect("selectmonth",1,12)
+            currentYear=new Date().getFullYear()
+            createSelect("selectyear",1900,currentYear)
+        </script>
+        <table id="tbl">
+            <tr style="background-color: blue; color:white;">
+                <td>Name</td>
+                <td>Email</td>
+                <td>Gender</td>
+                <td>Birthday</td>
+                <td>Hobbies</td>
+                <td>Colors</td>
+            </tr>
+            <tr onmouseover="changeBackgroundOver(this)"
+                onmouseout="changeBackgroundOut(this)">
+                <td>John</td>
+                <td>john@gmail.com</td>
+                <td>Man</td>
+                <td>02/02/1990</td>
+                <td>Reading</td>
+                <td>Yellow</td>
+            </tr>
+            <tr onmouseover="changeBackgroundOver(this)"
+                onmouseout="changeBackgroundOut(this)">
+                <td>Peter</td>
+                <td>peter@gmail.com</td>
+                <td>Man</td>
+                <td>01/01/1992</td>
+                <td>Chat, reading</td>
+                <td>Red</td>
+            </tr>
+            <tr onmouseover="changeBackgroundOver(this)"
+                onmouseout="changeBackgroundOut(this)">
+                <td>Lucy</td>
+                <td>lucy@gmail.com</td>
+                <td>Woman</td>
+                <td>01/02/2005</td>
+                <td>Listening, Chat</td>
+                <td>Violet</td>
+            </tr>
+        </table>
+    </body>
+</html>

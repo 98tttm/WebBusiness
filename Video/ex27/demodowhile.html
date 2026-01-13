@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width"/>
+        <title>Tính Giai Thừa Bằng DO WHILE</title>
+        <script type="text/javascript">
+            function tinh()
+            {
+                n=parseInt(myform.txtn.value)
+                i=1
+                gt=1
+                do 
+                {
+                    gt=gt*1
+                    i++
+                } while (i<=n);
+                document.getElementById("ketqua").innerText=gt
+            }
+        </script>
+    </head>
+    <body>
+        <form name="my_form">
+            <p>Nhập n:</p>
+            <input type="text" id="son">
+            <p id="ketqua"></p>
+            <button type="button" onclick="tinh()">Tính Giai Thừa</button>
+        </form>
+    </body>
+</html>

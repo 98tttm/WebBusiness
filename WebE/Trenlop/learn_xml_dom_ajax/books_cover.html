@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width" />
+  <title>List of Books</title>
+</head>
+<body>
+  <table border="1" style="border-collapse: collapse; width: 100%;">
+    <caption><b>List of Books:</b></caption>
+    <thead style="background-color: #f2f2f2;">
+      <tr>
+        <th>Title</th>
+        <th>Author</th>
+        <th>Year</th>
+        <th>Cover</th>
+        <th>Action</th>
+      </tr>
+    </thead>
+    <tbody id="book_tbody"></tbody>
+  </table>
+
+  <script type="text/javascript">
+    var xhr = new XMLHttpRequest();
+    xhr.open("GET", "datasets/books_cover.xml", true);
+    xhr.send();
+
+    xhr.onreadystatechange = function () {
+      if (xhr.readyState == 4 && xhr.status == 200) {
+        var xmlDoc = xhr.responseXML;
+        var books = xmlDoc.getElementsByTagName("book");
+        var tbody = document.getElementById("book_tbody");
+
+        for (let i = 0; i < books.length; i++) {
+          let book = books[i];
+
+          // Lấy dữ liệu từ các thẻ con
+          let title = book.getElementsByTagName("title")[0].textContent;
+          let author = book.getElementsByTagName("author")[0].textContent;
+          let year = book.getElementsByTagName("year")[0].textContent;
+          let cover = book.getElementsByTagName("cover")[0].textContent;
+
+          // Tạo các ô td
+          let td_title = document.createElement("td");
+          td_title.innerText = title;
+
+          let td_author = document.createElement("td");
+          td_author.innerText = author;
+
+          let td_year = document.createElement("td");
+          td_year.innerText = year;
+
+          let td_cover = document.createElement("td");
+          let img = document.createElement("img");
+            img.src = "../img/" + cover; // đúng đường dẫn ảnh
+            img.alt = title;
+            img.width = 80;
+            img.height = 100;
+            td_cover.appendChild(img);
+
+          let td_action = document.createElement("td");
+          let btn = document.createElement("button");
+          btn.innerText = "View";
+          // dùng closure để mỗi nút nhớ đúng title
+          btn.onclick = function () {
+            alert("You clicked on: " + title);
+          };
+          td_action.appendChild(btn);
+
+          // Tạo hàng và thêm vào tbody
+          let tr = document.createElement("tr");
+          tr.appendChild(td_title);
+          tr.appendChild(td_author);
+          tr.appendChild(td_year);
+          tr.appendChild(td_cover);
+          tr.appendChild(td_action);
+
+          tbody.appendChild(tr);
+        }
+      } else if (xhr.readyState == 4 && xhr.status != 200) {
+        alert("Failed to load XML file.");
+      }
+    };
+  </script>
+</body>
+</html>

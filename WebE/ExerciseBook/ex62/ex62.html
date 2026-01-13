@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <title>Table Mouse Trigger</title>
+        <style type="text/css">
+            table{
+                border-collapse: collapse;
+            }
+            table th,td{
+                border: 1px solid black;
+            }
+            thead,tfoot
+            {
+            background-color:blue;
+            color:white;
+            }
+            tbody tr:nth-child(2n+1)
+            {
+            background-color:whitesmoke
+            }
+            tbody tr:nth-child(2n) {
+            background-color: pink
+            }
+        </style>
+        <script type="text/javascript">
+            function changeBackgroundOver(obj)
+            {
+                obj.style.backgroundColor='yellow'
+            }
+            function changeBackgroundOut(obj)
+            {
+                obj.style.backgroundColor='green'
+            }
+        </script>
+    </head>
+    <body>
+        <table width="600">
+            <thead onmouseover="changeBackgroundOver(this)"
+                    onmouseout="changeBackgroundOut(this)">
+                <tr>
+                    <th>#</th>
+                    <th>Student ID</th>
+                    <th>Student Name</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr onmouseover="changeBackgroundOver(this)"
+                    onmouseout="changeBackgroundOut(this)">
+                    <td>1</td>
+                    <td>123456</td>
+                    <td>Albert Einstein</td>
+                </tr>
+                <tr onmouseover="changeBackgroundOver(this)"
+                    onmouseout="changeBackgroundOut(this)">
+                    <td>2</td>
+                    <td>321234</td>
+                    <td>Nieks Bohr</td>
+                </tr>
+                <tr onmouseover="changeBackgroundOver(this)"
+                    onmouseout="changeBackgroundOut(this)">
+                    <td>3</td>
+                    <td>987544</td>
+                    <td>Stephen Hawking</td>
+                </tr>
+                <tr onmouseover="changeBackgroundOver(this)"
+                    onmouseout="changeBackgroundOut(this)">
+                    <td>4</td>
+                    <td>359687</td>
+                    <td>Isaac Newton</td>
+                </tr>
+                <tr onmouseover="changeBackgroundOver(this)"
+                    onmouseout="changeBackgroundOut(this)">
+                    <td>5</td>
+                    <td>574878</td>
+                    <td>Nikola Tesla</td>
+                </tr>
+            </tbody>
+            <tfoot onmouseover="changeBackgroundOver(this)"
+                onmouseout="changeBackgroundOut(this)">
+                <tr>
+                    <td colspan="3">Designed by John</td>
+                </tr>
+            </tfoot>
+        </table>
+    </body>
+</html>

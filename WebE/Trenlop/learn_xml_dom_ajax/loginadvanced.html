@@ -1,0 +1,121 @@
+<html><head>
+        <title>Login - System - TRAN THANH THINH</title>       
+        <script type="text/javascript">
+           function select_one(json_accounts,uid,pwd)
+           {
+                for(i=0;i<json_accounts.accounts.length;i++)
+                {
+                    ac=json_accounts.accounts[i]
+                    if(ac.user==uid && ac.password==pwd)
+                    {
+                        return ac        
+                    }
+                }
+                return null
+           }
+        </script>
+        <script type="text/javascript">
+            function process_login()
+            {
+                var xhr =new XMLHttpRequest();
+                xhr.open("GET","datasets/account.json",true);
+                xhr.send();
+                xhr.onreadystatechange=function()
+                {
+                    if (xhr.readyState==4 && xhr.status==200)
+                    {
+                        //alert(xhr.responseText)
+                        json_accounts=JSON.parse(xhr.responseText)
+                        ac=select_one(
+                            json_accounts,
+                            my_form.user_name.value,
+                            my_form.password.value
+                        )    
+                        if (ac==null)
+                        {
+                            alert("Login failed, contact to ADMIN")        
+                        }
+                        else
+                        {
+                            //convert Json Object into string:
+                            string_json=JSON.stringify(ac)
+                            //save string into harddisk:
+                            localStorage.setItem("login_infor",string_json)
+                            localStorage.setItem("save_infor",my_form.save_infor.checked)
+                            if(ac.user=="admin")
+                            {
+                                window.open("books_cover.html","_self")        
+                            }
+                            else
+                            {
+                                window.open("xml_dom1.html","_self")
+                            }
+                        }
+                    }
+                    else
+                    {
+                        
+                    }
+                }
+            }
+        </script>
+    <style type="text/css" id="operaUserStyle"></style></head>
+    <body>
+        <form name="my_form">
+            <fieldset>
+                <legend>Login ABC System:</legend>
+                <table>
+                    <tbody><tr>
+                        <td rowspan="6">
+                            <img src="images/ic_admin.png" width="200" height="250">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="user_name" id="user_name">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="password" name="password" id="password">
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="save_infor" id="save_infor">
+                            <label for="save_infor">Save login information</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="button" onclick="process_login()">Login</button>
+                        </td>
+                    </tr>
+                </tbody></table>
+            </fieldset>
+        </form>
+        <script type="text/javascript">
+            function load_login_infor()
+            {
+                json_string=localStorage.getItem("login_infor")
+                json_object=JSON.parse(json_string)
+                save=localStorage.getItem("save_infor")
+                if(save=='true')
+                {
+                    my_form.user_name.value=json_object.user
+                    my_form.password.value=json_object.password
+                    my_form.save_infor.checked=true
+                }
+            }
+            load_login_infor()
+        </script>
+    
+</body>
+</html>

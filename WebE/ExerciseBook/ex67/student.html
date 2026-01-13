@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>STUDENT XML</title>
+    <style>
+        .student-details {
+            display: none;
+        }
+        table{
+            border-collapse: collapse;
+        }
+    </style>
+    <script type="text/javascript">
+        var studentsData = [];
+        var sortOrders = {
+            id: 1,
+            name: 1,
+            birthday: 1,
+        };
+
+        function loadStudent() {
+            var xhr = new XMLHttpRequest();
+            xhr.open("GET", "students.xml", true);
+            xhr.send();
+            xhr.onreadystatechange = function () {
+                if (xhr.readyState == 4 && xhr.status == 200) {
+                    var xmlDoc = xhr.responseXML;
+                    studentsData = Array.from(xmlDoc.getElementsByTagName("student")).map(student => ({
+                        id: student.querySelector("id").textContent,
+                        name: student.querySelector("name").textContent,
+                        birthday: student.querySelector("birthday").textContent,
+                        gender: student.querySelector("gender").textContent,
+                    }));
+                    renderTable();
+                }
+            };
+        }
+
+        function renderTable() {
+            var bodytable = document.getElementById("idbodytable");
+            bodytable.innerHTML = "";
+
+            studentsData.forEach(function (student) {
+                var tr = document.createElement("tr");
+                tr.innerHTML = "<td>" + student.id + "</td><td>" + student.name + "</td><td>" + student.birthday + "</td><td>" + student.gender + "</td>";
+                bodytable.appendChild(tr);
+
+                tr.addEventListener('click', function () {
+                    toggleStudentDetails(tr, student);
+                });
+
+                tr.onmouseover = function () {
+                    var tds = tr.getElementsByTagName("td");
+                    for (var i = 0; i < tds.length; i++) {
+                        tds[i].style.backgroundColor = "yellow";
+                    }
+                };
+
+                tr.onmouseout = function () {
+                    var tds = tr.getElementsByTagName("td");
+                    for (var i = 0; i < tds.length; i++) {
+                        tds[i].style.backgroundColor = "";
+                    }
+                };
+            });
+        }
+
+        function toggleStudentDetails(row, student) {
+            var detailsRow = document.getElementById("student-details-row");
+            var detailsTable = document.getElementById("student-details-table");
+
+            if (detailsRow.style.display === "none") {
+                detailsRow.style.display = "table-row";
+                detailsTable.innerHTML = `
+                    <td colspan='4'>
+                        <h2 style="text-align: center;background-color: rgb(154, 190, 154)">${student.name} information</h2>
+                        <table border='1' style='width: 100%'>
+                            <tr>
+                                <td>ID:</td>
+                                <td>${student.id}</td>
+                            </tr>
+                            <tr>
+                                <td>Name:</td>
+                                <td>${student.name}</td>
+                            </tr>
+                            <tr>
+                                <td>Birthday:</td>
+                                <td>${student.birthday}</td>
+                            </tr>
+                            <tr>
+                                <td>Gender:</td>
+                                <td>${student.gender}</td>
+                            </tr>
+                        </table>
+                    </td>`;
+            } else {
+                detailsRow.style.display = "none";
+                detailsTable.innerHTML = "";
+            }
+        }
+
+        // Add event listeners for student names
+        document.addEventListener('click', function (event) {
+            if (event.target.classList.contains('student-name')) {
+                toggleStudentDetails(event.target, studentsData.find(student => student.id === event.target.id));
+            }
+        });
+
+
+    </script>
+</head>
+
+<body>
+    <table border="1" style="width: 400px;">
+        <thead>
+            <tr>
+                <th colspan="4" style="text-align: center; background-color: rgb(206, 206, 67);">List of student</th>
+            </tr>
+            <tr style="background-color: green; color: white;">
+                <th onclick="sortByColumn('id')">Student ID</th>
+                <th onclick="sortByColumn('name')">Student Name</th>
+                <th onclick="sortByColumn('birthday')">Birthday</th>
+                <th onclick="sortByColumn('gender')">Gender</th>
+            </tr>
+        </thead>
+        <tbody id="idbodytable"></tbody>
+    </table>
+
+    <table  style="width: 400px;">
+        <tbody>
+            <tr id="student-details-row" class="student-details">
+                <td colspan="4" id="student-details-table"></td>
+            </tr>
+        </tbody>
+    </table>
+
+    <script type="text/javascript">
+        loadStudent();
+    </script>
+</body>
+
+</html>

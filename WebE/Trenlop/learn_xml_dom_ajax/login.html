@@ -1,0 +1,48 @@
+<html>
+    <head>
+        <title>Login - System</title>
+        
+    </head>
+    <body>
+        <form name="my_form">
+            <fieldset>
+                <legend>Login ABC System:</legend>
+                <table>
+                    <tr>
+                        <td rowspan="6">
+                            <img src="images/ic_admin.png" width="200" height="250"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>User:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="text" name="user_name" id="user_name"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Password:</td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="password" name="password" id="password"/>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <input type="checkbox" name="save_infor" id="save_infor"/>
+                            <label for="save_infor">Save login information</label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td></td>
+                        <td>
+                            <button type="button" onclick="process_login()">Login</button>
+                        </td>
+                    </tr>
+                </table>
+            </fieldset>
+        </form>
+    </body>
+</html>

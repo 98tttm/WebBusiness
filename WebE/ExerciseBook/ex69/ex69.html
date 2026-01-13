@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Exercise 69</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            width: 300px;
+        }
+        th{
+            background-color: GREEN;
+            color: white;
+        }
+    </style>
+    <script type="text/javascript">
+        var xhr = new XMLHttpRequest();
+        xhr.open("GET", "employees.xml", true);
+        xhr.send();
+        xhr.onreadystatechange=function()
+            {
+                if(xhr.readyState==4 && xhr.status==200)
+                {
+                    var xmlDoc=xhr.responseXML;
+                    loadTitles(xmlDoc)
+                }
+            }
+        function loadTitles(xmlDoc)
+        {
+            var titlesDropdown = document.getElementById("titles");
+            var employees = xmlDoc.getElementsByTagName("employee");
+            var uniqueTitle=new Set()
+            for (i=0; i<employees.length; i++)
+            {
+                var title = employees[i].getAttribute("title");
+                uniqueTitle.add(title)
+            }
+            uniqueTitleArray=Array.from(uniqueTitle)
+            for (i=0; i<uniqueTitleArray.length; i++)
+            {
+                var option=document.createElement("option")
+                option.value=uniqueTitleArray[i]
+                option.text=uniqueTitleArray[i]
+                titlesDropdown.add(option)
+            }
+            titlesDropdown.addEventListener("change", displayEmployee)
+            //display data of current selected
+            displayEmployee()
+        }
+        function displayEmployee()
+        {
+            var selectedTitle = document.getElementById("titles").value;
+            var xmlDoc = xhr.responseXML;
+            var employees = xmlDoc.getElementsByTagName("employee");
+            var tableBody = document.getElementById("tableBody");
+            //delete current value
+            tableBody.innerHTML = "";
+            for (var i = 0; i < employees.length; i++) {
+                var title = employees[i].getAttribute("title");
+                if (title == selectedTitle) {
+                    var id = employees[i].getAttribute("id");
+                    var name = employees[i].getElementsByTagName("name")[0].childNodes[0].nodeValue;
+                    var phone = employees[i].getElementsByTagName("phone")[0].childNodes[0].nodeValue;
+                    tr=document.createElement("tr")
+                    tdid=document.createElement("td")
+                    tdid.innerHTML=id
+                    tdname=document.createElement("td")
+                    tdname.innerHTML=name
+                    tdphone=document.createElement("td")
+                    tdphone.innerHTML=phone
+                    tr.appendChild(tdid)
+                    tr.appendChild(tdname)
+                    tr.appendChild(tdphone)
+                    tableBody.appendChild(tr)
+                }
+            }   
+        }
+    </script>
+</head>
+<body>
+    <table id="mytable" border="1">
+        <tr>
+            <td>
+                <label for="titles">Title:</label>
+            </td>
+            <td colspan="2">                    
+                <select id="titles">
+                </select>
+            </td>
+        </tr>
+        <tr>
+            <th>Employee ID</th>
+            <th>Employee Name</th>
+            <th>Phone</th>
+        </tr>
+        <tbody id="tableBody">
+        </tbody>
+    </table>
+    <script>
+    </script>
+</body>
+</html>

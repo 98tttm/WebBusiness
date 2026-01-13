@@ -1,0 +1,179 @@
+<html>
+    <head>
+        <title>Exercise 67</title>
+        <style>
+            table{
+                border-collapse: collapse;
+            }
+            #header{
+                cursor: pointer;
+            }
+            td{
+                padding-left: 5px;
+                cursor: pointer;
+            }
+        </style>
+        <script type="text/javascript">
+            txt="<students><student>"
+            txt+="<id>987456</id>"
+            txt+="<name>Marie Curie</name>"
+            txt+="<birthday>7/11/1867</birthday>"
+            txt+="<gender>Woman</gender>"
+            txt+="</student>"
+            txt+="<student>"
+            txt+="<id>987561</id>"
+            txt+="<name>Einstein</name>"
+            txt+="<birthday>14/3/1879</birthday>"
+            txt+="<gender>Man</gender>"
+            txt+="</student>"
+            txt+="<student>"
+            txt+="<id>985467</id>"
+            txt+="<name>Leó Szilárd</name>"
+            txt+="<birthday>11/2/1898</birthday>"
+            txt+="<gender>Man</gender>"
+            txt+="</student></students>"
+        </script>
+        <script type="text/javascript">
+
+            //Onmouse over function
+            function changeBackgroundOver(obj)
+            {
+                obj.style.backgroundColor='yellow'
+            }
+
+            //Onmouse out function
+            function changeBackgroundOut(obj)
+            {
+                obj.style.backgroundColor='white'
+            }
+
+            //sort function
+            function sortTable(n) 
+            {
+                var table, rows, switching, i, x, y, shouldSwitch, dir, switchcount = 0;
+                table = document.getElementById("mytable");
+                switching = true;
+                dir = "asc";
+                while (switching) 
+                {
+                    switching = false;
+                    rows = table.rows;
+                    for (i = 2; i <= (rows.length -2); i++) 
+                    {
+                        shouldSwitch = false;
+                        x = rows[i].getElementsByTagName("TD")[n];
+                        y = rows[i + 1].getElementsByTagName("TD")[n];
+                        if (dir == "asc") 
+                        {
+                            if (x.innerHTML.toLowerCase() > y.innerHTML.toLowerCase()) 
+                            {
+                                shouldSwitch = true;
+                                break;
+                            }
+                        } 
+                        else if (dir == "desc") 
+                        {
+                            if (x.innerHTML.toLowerCase() < y.innerHTML.toLowerCase())
+                            {
+                                shlouldSwitch = true;
+                                break;
+                            }
+                        }
+                    }
+                    if (shouldSwitch) 
+                    {
+                        rows[i].parentNode.insertBefore(rows[i + 1], rows[i]);
+                        switching = true;
+                        switchcount ++;
+                    } 
+                    else 
+                    {
+                        if (switchcount == 0 && dir == "asc") 
+                        {
+                            dir = "desc";
+                            switching = true;
+                        }
+                    }
+                }
+            }
+
+            //Show detail page function
+            function showDetails(obj) 
+            {
+                // Lấy thông tin từ hàng đang được click
+                var id = obj.cells[0].innerHTML;
+                var name = obj.cells[1].innerHTML;
+                var birthday = obj.cells[2].innerHTML;
+                var gender = obj.cells[3].innerHTML;             
+                // Mở trang Chi tiết trong một cửa sổ mới
+                window.location.href = "detail.html?id=" + id +
+                                        '&name=' + name +
+                                        '&birthday=' + birthday +
+                                        '&gender=' + gender;
+
+            }
+        </script>
+    </head>
+    <body>
+        <table border="1" id="mytable" width="400">
+            <tr>
+                <th colspan="4"
+                    style="background-color: yellow">
+                    List of Students
+                </th>
+            </tr>
+            <tr id="header" style="background-color: green; color: white;">
+                <th onclick="sortTable(0)">Student ID</th>
+                <th onclick="sortTable(1)">Student Name</th>
+                <th onclick="sortTable(2)">Birthday</th>
+                <th onclick="sortTable(3)">Gender</th>
+            </tr>
+            <tbody id="tblbody"></tbody>
+        </table>
+
+        <script type="text/javascript">
+            //load data
+            var parser=new DOMParser()
+            var xmlDoc=parser.parseFromString(txt,"text/xml")
+            tblbody=document.getElementById("tblbody")
+            xmlLength=xmlDoc.getElementsByTagName("id").length
+            for (i=0;i<=xmlLength;i++)
+            {
+                //insert id
+                tr=document.createElement("tr")
+                tdid=document.createElement("td")
+                id=xmlDoc.getElementsByTagName("id")[i].childNodes[0].nodeValue
+                tdid.innerHTML=id
+                tr.appendChild(tdid)
+                //insert name
+                tdname=document.createElement("td")
+                name=xmlDoc.getElementsByTagName("name")[i].childNodes[0].nodeValue
+                tdname.innerHTML=name
+                tr.appendChild(tdname)
+                //insert birthday
+                tdbirthday=document.createElement("td")
+                birthday=xmlDoc.getElementsByTagName("birthday")[i].childNodes[0].nodeValue
+                tdbirthday.innerHTML=birthday
+                tr.appendChild(tdbirthday)
+                //insert gender
+                tdgender=document.createElement("td")
+                gender=xmlDoc.getElementsByTagName("gender")[i].childNodes[0].nodeValue
+                tdgender.innerHTML=gender
+                tr.appendChild(tdgender)
+                tr.onmouseover= function()
+                    {
+                        changeBackgroundOver(this)
+                    } 
+                tr.onmouseout= function()
+                    {
+                        changeBackgroundOut(this)
+                    }
+                tr.onclick = function() 
+                    {
+                        showDetails(this); 
+                    }        
+                tblbody.appendChild(tr)
+            }     
+        </script>
+    </body>
+</html>

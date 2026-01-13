@@ -1,0 +1,64 @@
+<html>
+<head>
+    <title>Detail Page</title>
+    <style>
+        table{
+            border-collapse: collapse;
+            width: 300;
+        }
+        th{
+            background-color: aquamarine;
+        }
+        td{
+            padding-left:5px;
+        }
+    </style>
+    <script type="text/javascript">
+        function openMainPage() 
+        {
+            window.open("ex67.html", "_self");
+        }
+    </script>
+    
+</head>
+<body>
+    <table id="detailTable" border="1">
+        <tr>
+            <th colspan="2">Student Information</th>
+        </tr>
+        <tr>
+            <td>Student ID:</td>
+            <td id="tdid"></td>
+        </tr>
+        <tr>
+            <td>Student Name:</td>
+            <td id="tdname"></td>
+        </tr>
+        <tr>
+            <td>Birthday:</td>
+            <td id="tdbirthday"></td>
+        </tr>
+        <tr>
+            <td>Gender:</td>
+            <td id="tdgender"></td>
+        </tr>
+    </table>
+    <p>
+        <input type="button" value="Back to main page"
+            onclick="openMainPage()">
+    </p>
+    <script>
+        var urlParams = new URLSearchParams(window.location.search);
+        var id = urlParams.get('id');
+        var name = urlParams.get('name');
+        var birthday = urlParams.get('birthday');
+        var gender = urlParams.get('gender');
+
+        // Đặt thông tin vào bảng chi tiết
+        document.getElementById("tdid").innerHTML = id;
+        document.getElementById("tdname").innerHTML = name;
+        document.getElementById("tdbirthday").innerHTML = birthday;
+        document.getElementById("tdgender").innerHTML = gender;
+    </script>
+</body>
+</html>

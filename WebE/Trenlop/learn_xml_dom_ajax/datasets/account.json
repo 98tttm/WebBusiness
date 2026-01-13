@@ -1,0 +1,14 @@
+{
+    "accounts": [
+        {
+            "user": "admin",
+            "fullname": "gi do",
+            "password": "123"
+        },
+        {
+            "user": "employee",
+            "fullname": "gi do",
+            "password": "456"
+        }
+    ]
+}

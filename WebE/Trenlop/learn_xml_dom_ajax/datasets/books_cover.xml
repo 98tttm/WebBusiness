@@ -1,0 +1,20 @@
+<bookstore>
+    <book>
+        <title>Everyday Italian</title>
+        <author>Giada De Laurentiis</author>
+        <year>2005</year>
+        <cover>book1.png</cover>
+    </book>
+    <book>
+        <title>Một bữa no</title>
+        <author>Nam cao</author>
+        <year>1945</year>
+        <cover>book2.png</cover>
+    </book>
+    <book>
+        <title>Đời thừa</title>
+        <author>Nam cao</author>
+        <year>1943</year>
+        <cover>book3.png</cover>
+    </book>
+</bookstore>
