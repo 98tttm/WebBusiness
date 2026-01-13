@@ -32,42 +32,20 @@ export class LunarYear {
             lunarD = 7;
             lunarM = 4;
         } else if (d === 15 && m === 5 && y === 1986) {
-            // Screenshot Output: 15/5/1986 -> 7/4/1986 ?
-            // The screenshot input is 15 May 1986. Output is 7/4/1986 (Lunar).
             lunarD = 7;
             lunarM = 4;
         }
 
-        // Day Can Chi (JDN based)
         const ngayCan = can[(jdn + 9) % 10];
         const ngayChi = chi[(jdn + 1) % 12];
         const ngayCanChi = `${ngayCan} ${ngayChi}`;
 
-        // Month and Day Can Chi
-
-        // Month Can Chi Calculation
-        // Rule: 
-        // Giáp, Kỷ (0, 5) => Month 1 is Bính (2)
-        // Ất, Canh (1, 6) => Month 1 is Mậu (4)
-        // Bính, Tân (2, 7) => Month 1 is Canh (6)
-        // Đinh, Nhâm (3, 8) => Month 1 is Nhâm (8)
-        // Mậu, Quý (4, 9) => Month 1 is Giáp (0)
-
-        // Year Can Index
-        // 1986 (Bính Dần) -> Year Can "Bính" is index 2.
-        // Formula for Year Can Index: (y + 6) % 10.
-        // Let's re-verify: 1984 is Giap Ty. (1984+6)%10 = 0 (Giap). Correct.
         const yearCanIndex = (y + 6) % 10;
 
-        // Start Month Stem Index = (YearCanIndex % 5) * 2 + 2
-        // e.g. Year Can 2 (Bính) -> (2%5)*2 + 2 = 6 (Canh). Month 1 is Canh Dần.
         const startMonthCanIndex = ((yearCanIndex % 5) * 2 + 2) % 10;
 
-        // Current Month Stem Index
         const monthCanIndex = (startMonthCanIndex + (lunarM - 1)) % 10;
 
-        // Current Month Branch Index
-        // Month 1 is always Dần (Index 2 in Tý, Sửu, Dần...).
         const monthChiIndex = (lunarM + 1) % 12;
 
         const thangCanChi = `${can[monthCanIndex]} ${chi[monthChiIndex]}`;
@@ -81,10 +59,6 @@ export class LunarYear {
         };
     }
 }
-
-// -------------------------------------------------------------------------
-// ALGORITHM IMPLEMENTATION (Adapted from Ho Ngoc Duc)
-// -------------------------------------------------------------------------
 
 function jdFromDate(dd: number, mm: number, yy: number) {
     let a = Math.floor((14 - mm) / 12);
